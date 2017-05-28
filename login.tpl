@@ -3,13 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
     <title>Login</title>
     <style>
+        * {
+            box-sizing: border-box
+        }
         .login{
             width: 340px;margin:0 auto;
             border:1px solid #beb19b;
-            border-radius:5px;
-            padding: 30px;
+            border-radius:3px;
+            padding: 20px;
             font-family: "微软雅黑";font-size: 14px;
         }
         .form-body{
