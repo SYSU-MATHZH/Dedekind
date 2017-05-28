@@ -55,6 +55,7 @@ def do_login():
     username = bottle.request.forms.get('user_name')
     password = bottle.request.forms.get('user_password')
     isSaveStatus = bottle.request.forms.get('loginstatus')
+    print(isSaveStatus)
     conn = sqlite3.connect('db_dedekind.db')
     cur = conn.cursor()
     cur.execute('''SELECT user_id, user_password
@@ -68,11 +69,12 @@ def do_login():
             s = bottle.request.environ.get('beaker.session')
             s['user_id'] = int(user_id)
             if isSaveStatus:
+                print(isSaveStatus)
                 bottle.response.set_cookie(
                     'user_id', int(user_id), secret='rbtail', max_Age=5*24*3600)
             else:
                 bottle.response.set_cookie(
-                    'user_id', int(user_id), secret='rbtail')
+                    'user_id', int(user_id), secret='rbtail', max_Age=-1)
 
         else:
             conn.close()
