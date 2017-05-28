@@ -9,15 +9,16 @@
         * {
             box-sizing: border-box
         }
+        body {
+            background: #fdfdfd
+        }
         .login{
             width: 340px;margin:0 auto;
             border:1px solid #beb19b;
             border-radius:3px;
             padding: 20px;
             font-family: "微软雅黑";font-size: 14px;
-        }
-        .form-body{
-            padding: 10px;
+            background: #ffffff
         }
         label.text_label{
             display: block;
