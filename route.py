@@ -4,10 +4,8 @@ from beaker.middleware import SessionMiddleware
 from paste import httpserver
 
 
-
 SECRETKEY = 'rbbb=====afdasdasd'
 DOMAIN = '0.0.0.0'
-
 
 
 def login_check(session):
@@ -69,24 +67,29 @@ def do_login():
             s['user_id'] = int(user_id)
             if isSaveStatus:
                 bottle.response.set_cookie(
-                    'user_id', int(user_id), secret=SECRETKEY, max_age=5*24*3600, path='/')
+                    'user_id', int(user_id), secret=SECRETKEY,
+                    max_age=5 * 24 * 3600, path='/')
             else:
                 bottle.response.set_cookie(
                     'user_id', int(user_id), secret=SECRETKEY, path='/')
             bottle.response.set_cookie(
-                    'login_status', 'successful', secret=SECRETKEY, path='/')
+                'login_status', 0, secret=SECRETKEY, path='/')
+            # 0 means login successfully.
 
         else:
             conn.close()
             bottle.response.set_cookie(
-                    'login_status', 'user_password_error', secret=SECRETKEY, path='/')
+                'login_status', 2, secret=SECRETKEY,
+                path='/')
+            # 2 means wrong password.
             bottle.redirect('/login')
     else:
         conn.close()
         bottle.response.set_cookie(
-                    'login_status', 'user_name_error', secret=SECRETKEY, path='/')
+            'login_status', 1, secret=SECRETKEY, path='/')
+        # 1 means wrong username
         bottle.redirect('/login')
-        
+
     conn.close()
     bottle.redirect('/')
 
@@ -101,7 +104,6 @@ def logout():
     bottle.redirect('/')
 
 
-    
 session_opts = {
     'session.type': 'file',
     'session.cookie_expires': 300,
