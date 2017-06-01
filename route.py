@@ -1,19 +1,16 @@
 import sqlite3
 import bottle
 from beaker.middleware import SessionMiddleware
+from paste import httpserver
 
-session_opts = {
-    'session.type': 'file',
-    'session.cookie_expires': 300,
-    'session.data_dir': './tmp',
-    'session.auto': True
-}
-app = SessionMiddleware(bottle.app(), session_opts)
+SECRETKEY = 'rbbb=====afdasdasd'
+DOMAIN = '0.0.0.0'
 
 
 def login_check(session):
     user_id = session.get('user_id', -1)
-    user_id_cookie = bottle.request.get_cookie('user_id', secret='rbtail')
+    user_id_cookie = bottle.request.get_cookie('user_id', secret=SECRETKEY)
+    print(bottle.request.get_cookie('login_status', secret=SECRETKEY))
     if user_id_cookie is None:
         session['user_id'] = -1
         return False
@@ -70,17 +67,24 @@ def do_login():
             s['user_id'] = int(user_id)
             if isSaveStatus:
                 bottle.response.set_cookie(
-                    'user_id', int(user_id), secret='rbtail', max_age=5*24*3600)
+                    'user_id', int(user_id), secret=SECRETKEY, max_age=5*24*3600, path='/')
             else:
                 bottle.response.set_cookie(
-                    'user_id', int(user_id), secret='rbtail')
+                    'user_id', int(user_id), secret=SECRETKEY, path='/')
+            bottle.response.set_cookie(
+                    'login_status', 'successful', secret=SECRETKEY, path='/')
 
         else:
             conn.close()
+            bottle.response.set_cookie(
+                    'login_status', 'user_password_error', secret=SECRETKEY, path='/')
             bottle.redirect('/login')
     else:
         conn.close()
+        bottle.response.set_cookie(
+                    'login_status', 'user_name_error', secret=SECRETKEY, path='/')
         bottle.redirect('/login')
+
     conn.close()
     bottle.redirect('/')
 
@@ -90,8 +94,18 @@ def logout():
     s = bottle.request.environ.get('beaker.session')
     if login_check(s):
         s['user_id'] = -1
-        bottle.response.delete_cookie('user_id', secret='rbtail')
+        bottle.response.delete_cookie('user_id', secret=SECRETKEY)
+    bottle.response.delete_cookie('login_status', secret=SECRETKEY)
     bottle.redirect('/')
 
 
-bottle.run(app=app, host='0.0.0.0', port=8080, debug=True)
+
+session_opts = {
+    'session.type': 'file',
+    'session.cookie_expires': 300,
+    'session.data_dir': './tmp',
+    'session.auto': True
+}
+app = SessionMiddleware(bottle.app(), session_opts)
+# bottle.run(app=app, host=DOMAIN, port=8080, debug=True)
+httpserver.serve(app, host=DOMAIN, port=8080)
