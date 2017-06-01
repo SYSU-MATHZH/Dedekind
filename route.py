@@ -67,22 +67,27 @@ def do_login():
             s['user_id'] = int(user_id)
             if isSaveStatus:
                 bottle.response.set_cookie(
-                    'user_id', int(user_id), secret=SECRETKEY, max_age=5*24*3600, path='/')
+                    'user_id', int(user_id), secret=SECRETKEY,
+                    max_age=5 * 24 * 3600, path='/')
             else:
                 bottle.response.set_cookie(
                     'user_id', int(user_id), secret=SECRETKEY, path='/')
             bottle.response.set_cookie(
-                    'login_status', 'successful', secret=SECRETKEY, path='/')
+                'login_status', 0, secret=SECRETKEY, path='/')
+            # 0 means login successfully.
 
         else:
             conn.close()
             bottle.response.set_cookie(
-                    'login_status', 'user_password_error', secret=SECRETKEY, path='/')
+                'login_status', 2, secret=SECRETKEY,
+                path='/')
+            # 2 means wrong password.
             bottle.redirect('/login')
     else:
         conn.close()
         bottle.response.set_cookie(
-                    'login_status', 'user_name_error', secret=SECRETKEY, path='/')
+            'login_status', 1, secret=SECRETKEY, path='/')
+        # 1 means wrong username
         bottle.redirect('/login')
 
     conn.close()
@@ -106,7 +111,7 @@ def user_info():
     json = {}
     user_id = bottle.request.query.user_id
     if login_check(s) and user_id is not '' and int(user_id) == s['user_id']:
-        json['login_check'] = 1
+        json['login_check'] = 0
         json['user_id'] = int(user_id)
         conn = sqlite3.connect('db_dedekind.db')
         c = conn.cursor()
@@ -120,7 +125,7 @@ def user_info():
         json['user_info'] = info
         return json
     else:
-        json['login_check'] = 0
+        json['login_check'] = 1
         json['user_id'] = None
         json['user_info'] = {}
         return json
