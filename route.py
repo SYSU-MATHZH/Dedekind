@@ -41,6 +41,7 @@ def index():
         bottle.redirect('/login')
 
 
+# 登录
 @bottle.route('/login')
 def login():
     s = bottle.request.environ.get('beaker.session')
@@ -69,7 +70,7 @@ def do_login():
             s['user_id'] = int(user_id)
             if isSaveStatus:
                 bottle.response.set_cookie(
-                    'user_id', int(user_id), secret='rbtail', max_Age=5*24*3600)
+                    'user_id', int(user_id), secret='rbtail', max_age=5*24*3600)
             else:
                 bottle.response.set_cookie(
                     'user_id', int(user_id), secret='rbtail')
