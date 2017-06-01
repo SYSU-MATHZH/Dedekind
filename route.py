@@ -99,6 +99,32 @@ def logout():
     bottle.redirect('/')
 
 
+# 用户信息
+@bottle.route('/user_info')
+def user_info():
+    s = bottle.request.environ.get('beaker.session')
+    json = {}
+    user_id = bottle.request.query.user_id
+    if login_check(s) and user_id is not '' and int(user_id) == s['user_id']:
+        json['login_check'] = 1
+        json['user_id'] = int(user_id)
+        conn = sqlite3.connect('db_dedekind.db')
+        c = conn.cursor()
+        c.execute('''
+            SELECT user_code, user_name, user_suahours, user_email
+            FROM Users
+            WHERE user_id = :user_id''', {'user_id': int(user_id)})
+        result = c.fetchone()
+        info = {}
+        info['code'], info['name'], info['suahours'], info['email'] = result
+        json['user_info'] = info
+        return json
+    else:
+        json['login_check'] = 0
+        json['user_id'] = None
+        json['user_info'] = {}
+        return json
+
 
 session_opts = {
     'session.type': 'file',
