@@ -12,6 +12,7 @@ def login_check(session):
     group_rank = session.get('group_rank', -1)
     user_id_cookie = bottle.request.get_cookie('user_id', secret=SECRETKEY)
     group_rank_cookie = bottle.request.get_cookie('group_rank', secret=SECRETKEY)
+    print(group_rank_cookie)
     if user_id_cookie is None:
         session['user_id'] = -1
         session['group_rank'] = -1
