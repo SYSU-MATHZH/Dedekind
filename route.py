@@ -116,12 +116,14 @@ def user_info():
         conn = sqlite3.connect('db_dedekind.db')
         c = conn.cursor()
         c.execute('''
-            SELECT user_code, user_name, user_suahours, user_email
-            FROM Users
-            WHERE user_id = :user_id''', {'user_id': int(user_id)})
+            SELECT user_id, user_name, user_suahours, user_email, group_name
+            FROM Groups JOIN Users
+            ON Groups.group_id = Users.group_id AND user_id = :user_id''',
+                  {'user_id': int(user_id)})
         result = c.fetchone()
         info = {}
-        info['code'], info['name'], info['suahours'], info['email'] = result
+        info['code'], info['name'], info['suahours'], info[
+            'email'], info['group'] = result
         json['user_info'] = info
         return json
     else:
