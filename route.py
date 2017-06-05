@@ -9,14 +9,18 @@ DOMAIN = '0.0.0.0'
 
 def login_check(session):
     user_id = session.get('user_id', -1)
+    group_rank = session.get('group_rank', -1)
     user_id_cookie = bottle.request.get_cookie('user_id', secret=SECRETKEY)
-    print(bottle.request.get_cookie('login_status', secret=SECRETKEY))
+    group_rank_cookie = bottle.request.get_cookie('group_rank', secret=SECRETKEY)
     if user_id_cookie is None:
         session['user_id'] = -1
+        session['group_rank'] = -1
         return False
     else:
-        if user_id == -1:
+        if user_id == -1 or user_id != user_id_cookie:
             session['user_id'] = user_id_cookie
+        if group_rank == -1 or group_rank != group_rank_cookie:
+            session['group_rank'] = group_rank_cookie
         return True
 
 
@@ -55,13 +59,13 @@ def do_login():
     isSaveStatus = bottle.request.forms.get('loginstatus')
     conn = sqlite3.connect('db_dedekind.db')
     cur = conn.cursor()
-    cur.execute('''SELECT user_id, user_password
-                    FROM Users
-                    WHERE user_code = :user_code''',
+    cur.execute('''SELECT user_id, user_password, group_rank
+                    FROM Users JOIN Groups
+                    ON user_code = :user_code AND Users.group_id = Groups.group_id''',
                 {'user_code': username})
     result = cur.fetchone()
     if result is not None:
-        user_id, user_password = result
+        user_id, user_password, group_rank = result
         if password == str(user_password):
             s = bottle.request.environ.get('beaker.session')
             s['user_id'] = int(user_id)
@@ -69,9 +73,14 @@ def do_login():
                 bottle.response.set_cookie(
                     'user_id', int(user_id), secret=SECRETKEY,
                     max_age=5 * 24 * 3600, path='/')
+                bottle.response.set_cookie(
+                    'group_rank', int(group_rank), secret=SECRETKEY,
+                    max_age=5 * 24 * 3600, path='/')
             else:
                 bottle.response.set_cookie(
                     'user_id', int(user_id), secret=SECRETKEY, path='/')
+                bottle.response.set_cookie(
+                    'group_rank', int(group_rank), secret=SECRETKEY, path='/')
             bottle.response.set_cookie(
                 'login_status', 0, secret=SECRETKEY, path='/')
             # 0 means login successfully.
@@ -101,6 +110,7 @@ def logout():
         s['user_id'] = -1
         bottle.response.delete_cookie('user_id', secret=SECRETKEY)
     bottle.response.delete_cookie('login_status', secret=SECRETKEY)
+    bottle.response.delete_cookie('group_rank', secret=SECRETKEY)
     bottle.redirect('/')
 
 
@@ -116,14 +126,14 @@ def user_info():
         conn = sqlite3.connect('db_dedekind.db')
         c = conn.cursor()
         c.execute('''
-            SELECT user_id, user_name, user_suahours, user_email, group_name
+            SELECT user_id, user_name, user_suahours, user_email, group_name, group_rank
             FROM Groups JOIN Users
             ON Groups.group_id = Users.group_id AND user_id = :user_id''',
                   {'user_id': int(user_id)})
         result = c.fetchone()
         info = {}
         info['code'], info['name'], info['suahours'], info[
-            'email'], info['group'] = result
+            'email'], info['group'], info['rank'] = result
         json['user_info'] = info
         return json
     else:
