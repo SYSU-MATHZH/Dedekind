@@ -50,7 +50,7 @@ def login():
     if login_check(s):
         bottle.redirect('/')
     else:
-        return bottle.template('login')
+        return bottle.template('login.html')
 
 
 @bottle.route('/login', method='POST')
