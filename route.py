@@ -53,6 +53,11 @@ def login():
         return bottle.template('login.html')
 
 
+@bottle.route('/img/<filename:re:.*\.png>')
+def img_static(filename):
+    return bottle.static_file(filename, root='./img')
+
+
 @bottle.route('/login', method='POST')
 def do_login():
     username = bottle.request.forms.get('user_name')
