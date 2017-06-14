@@ -153,6 +153,45 @@ def user_info():
         return json
 
 
+# 公告信息
+@bottle.route('/notice')
+def notice():
+    s = bottle.request.environ.get('beaker.session')
+    json = {}
+    if login_check(s):
+        json['login_check'] = 0
+        conn = sqlite3.connect('db_dedekind.db')
+        c = conn.cursor()
+        c.execute('''
+            SELECT GSUA_title, group_name, GSUA_time, actorGroup_id, GSUA_noticeDetails, GSUA_noticeTitle
+            FROM GSUAs JOIN Groups, Certificates
+            ON GSUAs.group_id = Groups.group_id AND GSUAs.certificate_id = Certificates.cert_id AND GSUAs.GSUA_isNoticing = 1
+            ORDER BY GSUA_time''')
+        results = c.fetchall()
+        notices = []
+        json['notices_len'] = len(results)
+        for result in results:
+            info = {}
+            info['GSUA_title'], info['group'], info['time'], info['actorGroup_id'], info['notice_details'], info['notice_title'] = result
+            actorGroup = []
+            c.execute('''
+                SELECT user_name, actor_team, actor_suahours
+                FROM ActorGroups JOIN Users
+                ON ActorGroups.user_id = Users.user_id AND ActorGroups.actorGroup_id = :actorGroup_id
+                ORDER BY actor_team''', {'actorGroup_id': int(info['actorGroup_id'])})
+            actorResults = c.fetchall()
+            for actorResult in actorResults:
+                actor = {}
+                actor['name'], actor['team'], actor['suahours'] = actorResult
+                actorGroup.append(actor)
+            info['actorGroup'] = actorGroup
+            notices.append(info)
+        json['notices'] = notices
+    else:
+        json['login_check'] = 1
+        json['notices'] = None
+    return json
+
 @bottle.route('/test')
 def test():
     return bottle.template('test')
