@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>index</title>
+  <script type="text/javascript">
+  function go_index(){//从数据库获取JSON数据
+    xmlHttp = createXMLHttpRequest();
+    var url = "user_info?user_id="+getCookie("user_id_public");
+    xmlHttp.open("GET", url, true);// 异步处理返回
+    xmlHttp.onreadystatechange = callback;
+    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
+    xmlHttp.send();
+  }
+
+  function createXMLHttpRequest() {//与python响应获取信息
+      var xmlHttp;
+      if (window.XMLHttpRequest)
+         {xmlHttp = new XMLHttpRequest();
+          if (xmlHttp.overrideMimeType)
+          xmlHttp.overrideMimeType('text/xml');}
+      else if (window.ActiveXObject)
+         {try {xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");}
+         catch (e) {
+               try {xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");}
+               catch (e) {  } } }
+      return xmlHttp;
+      }
+
+  function callback(){
+  if(xmlHttp.readyState == 4 && xmlHttp.status == 200)//判断返回码
+    {var data=JSON.parse(xmlHttp.responseText);;
+     //alert(data.user_info.name) ;//显示数据库的成员姓名
+     user_name.innerHTML=data.user_info.name;//在body里面直接显示出姓名
+     user_id.innerHTML=data.user_info.code;//同上
+     user_suahours.innerHTML=data.user_info.suahours;
+    }
+  }
+
+  function getCookie(name){
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+   if(arr=document.cookie.match(reg))
+   return unescape(arr[2]);
+   else
+   return null;
+  }
+
+
+  </script>
+
+</head>
+<body onload="go_index()";>
+  <h1>公益时统计平台登入界面</h1>
+  <label>姓名：</label>
+  <label id="user_name"></label>
+  <br>
+  <label>学号：</label>
+  <label id="user_id"></label>
+  <br>
+  <label>公益时总数：</label>
+  <label id="user_suahours"></label>
+</body>
+</html>
