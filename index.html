@@ -5,17 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>index</title>
-  <script type="text/javascript">
-  function go_index(){//从数据库获取JSON数据
+  <script type="text/javascript" >
+   function go_index(){
+      get_user_id();
+      get_notice();
+   }
+
+   function get_user_id(){//从数据库获取JSON数据
     xmlHttp = createXMLHttpRequest();
     var url = "user_info?user_id="+getCookie("user_id_public");
     xmlHttp.open("GET", url, true);// 异步处理返回
-    xmlHttp.onreadystatechange = callback;
+    xmlHttp.onreadystatechange = callback1;
     xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
-    xmlHttp.send();
-  }
+    xmlHttp.send(); }
 
-  function createXMLHttpRequest() {//与python响应获取信息
+   function createXMLHttpRequest() {//与python响应获取信息
       var xmlHttp;
       if (window.XMLHttpRequest)
          {xmlHttp = new XMLHttpRequest();
@@ -29,25 +33,43 @@
       return xmlHttp;
       }
 
-  function callback(){
-  if(xmlHttp.readyState == 4 && xmlHttp.status == 200)//判断返回码
-    {var data=JSON.parse(xmlHttp.responseText);;
+   function callback1(){
+     if(xmlHttp.readyState == 4 && xmlHttp.status == 200)//判断返回码
+    {var data=JSON.parse(xmlHttp.responseText);
      //alert(data.user_info.name) ;//显示数据库的成员姓名
      user_name.innerHTML=data.user_info.name;//在body里面直接显示出姓名
      user_id.innerHTML=data.user_info.code;//同上
-     user_suahours.innerHTML=data.user_info.suahours;
-    }
-  }
+     user_suahours.innerHTML=data.user_info.suahours;//公益时信息
+     }   }
 
-  function getCookie(name){
-    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+   function getCookie(name){
+   var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
    if(arr=document.cookie.match(reg))
    return unescape(arr[2]);
    else
    return null;
   }
 
+   function get_notice(){//从数据库获取JSON数据
+    xmlHttp = createXMLHttpRequest();
+    var url = "notice";
+    xmlHttp.open("GET", url, true);// 异步处理返回
+    xmlHttp.onreadystatechange = callback2;
+    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
+    xmlHttp.send();  }
 
+   function callback2(){
+   if(xmlHttp.readyState == 4 && xmlHttp.status == 200)//判断返回码
+    {var data=JSON.parse(xmlHttp.responseText);
+     //alert(data.user_info.name) ;//显示数据库的成员姓名
+     user_GSUA_title.innerHTML=data.login_check;//if check == 0 输出
+     user_.innerHTML=data.notices[0].acotors[0].name;
+     //a=document.createElement("label"); 创建动态label  b= document.createTextNode("aaa");  定义label的值b
+     //a.appendChild(b);为a赋予b的值  document.body.appendChild(a); 创建一个新的label
+     user_notice_detail.innerHTML=data.notices[1].notice_details;
+     user_GSUA_time.innerHTML=data.notices[1].time;
+     user_actorGroupid.innerHTML=data.notices[1].actorGroup_id;
+  }  }
   </script>
 
 </head>
@@ -61,5 +83,17 @@
   <br>
   <label>公益时总数：</label>
   <label id="user_suahours"></label>
+  <br>
+  <label>GSUA_title:</label>
+  <label id="user_GSUA_title"></label>
+  <br>
+  <label>group name:</label>
+  <label id="user_notice_detail"></label>
+  <br>
+  <label>GSUA time:</label>
+  <label id="user_GSUA_time"></label>
+  <br>
+  <label>actorGroupid:</label>
+  <label id="user_actorGroupid"></label>
 </body>
 </html>
