@@ -184,7 +184,8 @@ def notice():
                 actor = {}
                 actor['name'], actor['team'], actor['suahours'] = actorResult
                 actorGroup.append(actor)
-            info['actorGroup'] = actorGroup
+            info['actors'] = actorGroup
+            info['actors_len'] = len(actorResults)
             notices.append(info)
         json['notices'] = notices
     else:
