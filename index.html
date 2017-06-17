@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh">
+<!doctype html>
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>index</title>
   <script type="text/javascript">
@@ -46,20 +46,65 @@
    else
    return null;
   }
-
-
-  </script>
-
+</script>
+<style type="text/css">
+.container {
+	display: inline-block;
+	margin-left: 30px;
+}
+.header {
+	background-color: #258BCC;
+	display: block;
+	padding-top: 0px;
+	height: 40px;
+	margin: 0 auto;
+}
+body {
+	margin: 0 auto;
+}
+.title-text {
+	font-size: 16px;
+	line-height: 1.5px;
+	font-family: 微软雅黑;
+}
+.float-left {
+	float: left;
+}
+.title {
+	padding-left: 9px;
+	padding-top: 2px;
+	color: #FFFFFF;
+}
+.logo {
+	margin-bottom: 5px;
+	margin-top: 5px;
+	margin-right: 0px;
+	margin-left: 0px;
+}
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+</style>
 </head>
-<body onload="go_index()";>
-  <h1>公益时统计平台登入界面</h1>
-  <label>姓名：</label>
-  <label id="user_name"></label>
-  <br>
-  <label>学号：</label>
-  <label id="user_id"></label>
-  <br>
-  <label>公益时总数：</label>
-  <label id="user_suahours"></label>
+
+<body>
+<div class="header">
+  <div class="container">
+    <div class="logo float-left"><img src="img/logo-icon.png" width="32" height="30" alt=""/></div>
+    <div class="title float-left">
+      <p class="title-text">公益时统计平台</p>
+	  </div>
+  </div>
+</div>
+<div class="main">
+  <div class="user_info">
+  	<label id="user_name">吴旋辉</label>
+  <label id="user_id">16343075</label>
+  <label id="user_suahours">0</label>
+  </div>
+  
+</div>
 </body>
 </html>
