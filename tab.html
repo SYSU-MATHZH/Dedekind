@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>丑死人的tab样式</title>
+</head>
+<style type="text/css">
+  #head {
+    width: 400px;
+    height: auto;
+  }
+
+  #head ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  #head ul li {
+    list-style: none;
+    float: left;
+    text-decoration: none;
+    display: block;
+    width: 100px;
+    padding: 5px;
+    margin: 0px 10px 0px 0px;
+    position: relative;
+  }
+
+  #head ul li a {
+    text-decoration: none;
+    color: #000000;
+  }
+
+  #head ul li a:visited {
+    text-decoration: none;
+    color: #000000;
+  }
+
+  #L1 {
+    background-color: #9CC;
+    border-top-color: #F6C;
+    border-right-color: #F6C;
+    border-left-color: #F6C;
+  }
+
+  #L2 {
+    background-color: #CC9;
+    border-color: #309;
+    margin-left: 1px;
+  }
+
+
+  #d1 {
+    background-color: #9CC;
+    border: 1px solid #C39;
+    width: 300px;
+    height: 220px;
+    margin-top: 0px;
+    position: relative;
+    z-index: 1;
+  }
+
+  #d2 {
+    background-color: #CC9;
+    border: 1px solid #309;
+    display: none;
+    width: 400px;
+    height: 220px;
+    margin-top: 0px;
+    position: relative;
+    z-index: 1;
+  }
+  .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 5px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+  }
+
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+
+  .dropdown-content {
+      display: none;
+      position: absolute;
+      z-index: 9999;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+
+  .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+  }
+
+  .dropdown-content a:hover {background-color: #f1f1f1}
+
+  .dropdown:hover .dropdown-content {
+      display: block;
+  }
+
+  .dropdown:hover .dropbtn {
+      background-color: #3e8e41;
+  }
+
+
+</style>
+<script language="javascript">
+  function Tab(num) {
+    var i;
+    for (i = 1; i <= 2; i++) {
+      if (i == num)
+        document.getElementById("d" + i).style.display = "block";
+      else
+        document.getElementById("d" + i).style.display = "none";
+    }
+  }
+
+</script>
+
+<body>
+  <div id="head" >
+    <ul>
+      <li id="L1" onclick="Tab(1)"><a href="#">公告信息</a></li>
+      <li id="L2" onclick="Tab(2)"><a href="#">今日热点</a></li>
+      <input type="button" name="" value="more">
+      <div class="dropdown">
+        <button class="dropbtn">下拉菜单</button>
+        <div class="dropdown-content">
+          <a href="http://www.runoob.com">菜鸟教程 1</a>
+          <a href="http://www.runoob.com">菜鸟教程 2</a>
+          <a href="http://www.runoob.com">菜鸟教程 3</a>
+      </div>
+      </div>
+    </ul>
+  </div>
+
+
+
+  <div id="d1">
+    <ul>
+      <li>这里是最新公告信息</li>
+      <li>这里是最新公告信息</li>
+      <li>这里是最新公告信息</li>
+      <li>这里是最新公告信息</li>
+    </ul>
+  </div>
+  <div id="d2">
+    <ul>
+      <li>这里是今日热点</li>
+      <li>这里是今日热点</li>
+      <li>这里是今日热点</li>
+      <li>这里是今日热点</li>
+    </ul>
+  </div>
+
+
+</div>
+</body>
+
+</html>

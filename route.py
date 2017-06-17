@@ -12,16 +12,19 @@ def login_check(session):
     group_rank = session.get('group_rank', -1)
     user_id_cookie = bottle.request.get_cookie('user_id', secret=SECRETKEY)
     group_rank_cookie = bottle.request.get_cookie('group_rank', secret=SECRETKEY)
-    print(group_rank_cookie)
+    print(user_id_cookie)
     if user_id_cookie is None:
         session['user_id'] = -1
         session['group_rank'] = -1
+        bottle.response.delete_cookie('user_id_public')
         return False
     else:
         if user_id == -1 or user_id != user_id_cookie:
             session['user_id'] = user_id_cookie
+            user_id = user_id_cookie
         if group_rank == -1 or group_rank != group_rank_cookie:
             session['group_rank'] = group_rank_cookie
+        bottle.response.set_cookie('user_id_public', str(user_id))
         return True
 
 
@@ -38,7 +41,7 @@ def index():
             WHERE user_id = :user_id''', {'user_id': int(user_id)})
         result = c.fetchone()
         code, name, suahours, email = result
-        return "Project Dedekind!" + " code: " + str(code) + " name: " + str(name) + " email: " + str(email) + " suahours: " + str(suahours)
+        return bottle.template('index.html')
     else:
         bottle.redirect('/login')
 
@@ -117,6 +120,7 @@ def logout():
         bottle.response.delete_cookie('user_id', secret=SECRETKEY)
     bottle.response.delete_cookie('login_status', secret=SECRETKEY)
     bottle.response.delete_cookie('group_rank', secret=SECRETKEY)
+    bottle.response.delete_cookie('user_id_public')
     bottle.redirect('/')
 
 
@@ -132,7 +136,7 @@ def user_info():
         conn = sqlite3.connect('db_dedekind.db')
         c = conn.cursor()
         c.execute('''
-            SELECT user_id, user_name, user_suahours, user_email, group_name, group_rank
+            SELECT user_code, user_name, user_suahours, user_email, group_name, group_rank
             FROM Groups JOIN Users
             ON Groups.group_id = Users.group_id AND user_id = :user_id''',
                   {'user_id': int(user_id)})
@@ -147,6 +151,51 @@ def user_info():
         json['user_id'] = None
         json['user_info'] = {}
         return json
+
+
+# 公告信息
+@bottle.route('/notice')
+def notice():
+    s = bottle.request.environ.get('beaker.session')
+    json = {}
+    if login_check(s):
+        json['login_check'] = 0
+        conn = sqlite3.connect('db_dedekind.db')
+        c = conn.cursor()
+        c.execute('''
+            SELECT GSUA_title, group_name, GSUA_time, actorGroup_id, GSUA_noticeDetails, GSUA_noticeTitle
+            FROM GSUAs JOIN Groups, Certificates
+            ON GSUAs.group_id = Groups.group_id AND GSUAs.certificate_id = Certificates.cert_id AND GSUAs.GSUA_isNoticing = 1
+            ORDER BY GSUA_time''')
+        results = c.fetchall()
+        notices = []
+        json['notices_len'] = len(results)
+        for result in results:
+            info = {}
+            info['GSUA_title'], info['group'], info['time'], info['actorGroup_id'], info['notice_details'], info['notice_title'] = result
+            actorGroup = []
+            c.execute('''
+                SELECT user_name, actor_team, actor_suahours
+                FROM ActorGroups JOIN Users
+                ON ActorGroups.user_id = Users.user_id AND ActorGroups.actorGroup_id = :actorGroup_id
+                ORDER BY actor_team''', {'actorGroup_id': int(info['actorGroup_id'])})
+            actorResults = c.fetchall()
+            for actorResult in actorResults:
+                actor = {}
+                actor['name'], actor['team'], actor['suahours'] = actorResult
+                actorGroup.append(actor)
+            info['actors'] = actorGroup
+            info['actors_len'] = len(actorResults)
+            notices.append(info)
+        json['notices'] = notices
+    else:
+        json['login_check'] = 1
+        json['notices'] = None
+    return json
+
+@bottle.route('/test')
+def test():
+    return bottle.template('test')
 
 
 session_opts = {

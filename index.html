@@ -1,19 +1,63 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
-<title>公益时平台</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>index</title>
+  <script type="text/javascript">
+  function go_index(){//从数据库获取JSON数据
+    xmlHttp = createXMLHttpRequest();
+    var url = "user_info?user_id="+getCookie("user_id_public");
+    xmlHttp.open("GET", url, true);// 异步处理返回
+    xmlHttp.onreadystatechange = callback;
+    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
+    xmlHttp.send();
+  }
+
+  function createXMLHttpRequest() {//与python响应获取信息
+      var xmlHttp;
+      if (window.XMLHttpRequest)
+         {xmlHttp = new XMLHttpRequest();
+          if (xmlHttp.overrideMimeType)
+          xmlHttp.overrideMimeType('text/xml');}
+      else if (window.ActiveXObject)
+         {try {xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");}
+         catch (e) {
+               try {xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");}
+               catch (e) {  } } }
+      return xmlHttp;
+      }
+
+  function callback(){
+  if(xmlHttp.readyState == 4 && xmlHttp.status == 200)//判断返回码
+    {var data=JSON.parse(xmlHttp.responseText);;
+     //alert(data.user_info.name) ;//显示数据库的成员姓名
+     user_name.innerHTML=data.user_info.name;//在body里面直接显示出姓名
+     user_id.innerHTML=data.user_info.code;//同上
+     user_suahours.innerHTML=data.user_info.suahours;
+    }
+  }
+
+  function getCookie(name){
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+   if(arr=document.cookie.match(reg))
+   return unescape(arr[2]);
+   else
+   return null;
+  }
+</script>
 <style type="text/css">
 .container {
 	display: inline-block;
-	margin-left: 10px;
+	margin-left: 30px;
 }
 .header {
 	background-color: #258BCC;
 	display: block;
 	padding-top: 0px;
 	height: 40px;
+	margin: 0 auto;
 }
 body {
 	margin: 0 auto;
@@ -47,11 +91,18 @@ body {
 
 <body>
 <div class="header">
-  <div class="container float-left">
+  <div class="container">
     <div class="logo float-left"><img src="img/logo-icon.png" width="32" height="30" alt=""/></div>
     <div class="title float-left">
       <p class="title-text">公益时统计平台</p>
-    </div>
+	  </div>
+  </div>
+</div>
+<div class="main">
+  <div class="user_info">
+  	<label id="user_name">吴旋辉</label>
+  <label id="user_id">16343075</label>
+  <label id="user_suahours">0</label>
   </div>
 </div>
 </body>
