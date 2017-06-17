@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh">
+<!doctype html>
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>index</title>
   <script type="text/javascript" >
@@ -12,12 +12,12 @@
    }
 
    function get_user_id(){//从数据库获取JSON数据
-    xmlHttp = createXMLHttpRequest();
+    xmlHttp1 = createXMLHttpRequest();
     var url = "user_info?user_id="+getCookie("user_id_public");
-    xmlHttp.open("GET", url, true);// 异步处理返回
-    xmlHttp.onreadystatechange = callback1;
-    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
-    xmlHttp.send(); }
+    xmlHttp1.open("GET", url, true);// 异步处理返回
+    xmlHttp1.onreadystatechange = callback1;
+    xmlHttp1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
+    xmlHttp1.send(); }
 
    function createXMLHttpRequest() {//与python响应获取信息
       var xmlHttp;
@@ -34,8 +34,8 @@
       }
 
    function callback1(){
-     if(xmlHttp.readyState == 4 && xmlHttp.status == 200)//判断返回码
-    {var data=JSON.parse(xmlHttp.responseText);
+     if(xmlHttp1.readyState == 4 && xmlHttp1.status == 200)//判断返回码
+    {var data=JSON.parse(xmlHttp1.responseText);
      //alert(data.user_info.name) ;//显示数据库的成员姓名
      user_name.innerHTML=data.user_info.name;//在body里面直接显示出姓名
      user_id.innerHTML=data.user_info.code;//同上
@@ -63,7 +63,6 @@
     {var data=JSON.parse(xmlHttp.responseText);
      //alert(data.user_info.name) ;//显示数据库的成员姓名
      user_GSUA_title.innerHTML=data.login_check;//if check == 0 输出
-     user_.innerHTML=data.notices[0].acotors[0].name;
      //a=document.createElement("label"); 创建动态label  b= document.createTextNode("aaa");  定义label的值b
      //a.appendChild(b);为a赋予b的值  document.body.appendChild(a); 创建一个新的label
      user_notice_detail.innerHTML=data.notices[1].notice_details;
@@ -71,29 +70,77 @@
      user_actorGroupid.innerHTML=data.notices[1].actorGroup_id;
   }  }
   </script>
-
+<style type="text/css">
+  .container {
+	display: inline-block;
+	margin-left: 30px;
+  }
+  .header {
+	background-color: #258BCC;
+	display: block;
+	padding-top: 0px;
+	height: 40px;
+	margin: 0 auto;
+  }
+  body {
+	margin: 0 auto;
+  }
+  title-text {
+	font-size: 16px;
+	line-height: 1.5px;
+	font-family: 微软雅黑;
+  }
+  .float-left {
+	float: left;
+  }
+  .title {
+	padding-left: 9px;
+	padding-top: 2px;
+	color: #FFFFFF;
+  }
+  .logo {
+	margin-bottom: 5px;
+	margin-top: 5px;
+	margin-right: 0px;
+	margin-left: 0px;
+  }
+  * {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+  }
+ </style>
 </head>
+
 <body onload="go_index()";>
-  <h1>公益时统计平台登入界面</h1>
-  <label>姓名：</label>
-  <label id="user_name"></label>
-  <br>
-  <label>学号：</label>
-  <label id="user_id"></label>
-  <br>
-  <label>公益时总数：</label>
-  <label id="user_suahours"></label>
-  <br>
-  <label>GSUA_title:</label>
-  <label id="user_GSUA_title"></label>
-  <br>
-  <label>group name:</label>
-  <label id="user_notice_detail"></label>
-  <br>
-  <label>GSUA time:</label>
-  <label id="user_GSUA_time"></label>
-  <br>
-  <label>actorGroupid:</label>
-  <label id="user_actorGroupid"></label>
+<div class="header">
+  <div class="container">
+    <div class="logo float-left"><img src="img/logo-icon.png" width="32" height="30" alt=""/></div>
+    <div class="title float-left">
+      <p class="title-text">公益时统计平台</p>
+	  </div>
+  </div>
+</div>
+<div class="main">
+  <div class="user_info">
+  	<label id="user_name">0</label>
+    <br>
+    <label id="user_id">16343075</label>
+    <br>
+    <label id="user_suahours">0</label>
+    <br>
+    <label>GSUA_title:</label>
+    <label id="user_GSUA_title"></label>
+    <br>
+    <label>group name:</label>
+    <label id="user_notice_detail"></label>
+    <br>
+    <label>GSUA time:</label>
+    <label id="user_GSUA_time"></label>
+    <br>
+    <label>actorGroupid:</label>
+    <label id="user_actorGroupid"></label>
+  </div>
+</div>
 </body>
 </html>
