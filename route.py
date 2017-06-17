@@ -60,6 +60,18 @@ def login():
 def img_static(filename):
     return bottle.static_file(filename, root='./img')
 
+@bottle.route('/img/<filename:re:.*\.jpg>')
+def img_static(filename):
+    return bottle.static_file(filename, root='./img')
+
+@bottle.route('/js/<filename:re:.*\.js>')
+def img_static(filename):
+    return bottle.static_file(filename, root='./js')
+
+@bottle.route('/css/<filename:re:.*\.css>')
+def img_static(filename):
+    return bottle.static_file(filename, root='./css')
+
 
 @bottle.route('/login', method='POST')
 def do_login():

@@ -1,11 +1,19 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>index</title>
-  <script type="text/javascript" >
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.bootcss.com/foundation/5.5.3/css/foundation.min.css">
+<!-- <link href="css/bootstrap.css" rel="stylesheet" type="text/css"> -->
+<link href="css/bootstrap-3.3.7.css" rel="stylesheet" type="text/css">
+<link href="css/index.css" rel="stylesheet" type="text/css">
+<!-- <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script> -->
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="https://cdn.bootcss.com/foundation/5.5.3/js/foundation.min.js"></script>
+<script src="https://cdn.bootcss.com/foundation/5.5.3/js/vendor/modernizr.js"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>公益时平台</title>
+<script type="text/javascript" >
    function go_index(){
       get_user_id();
       get_notice();
@@ -70,77 +78,39 @@
      user_actorGroupid.innerHTML=data.notices[1].actorGroup_id;
   }  }
   </script>
-<style type="text/css">
-  .container {
-	display: inline-block;
-	margin-left: 30px;
-  }
-  .header {
-	background-color: #258BCC;
-	display: block;
-	padding-top: 0px;
-	height: 40px;
-	margin: 0 auto;
-  }
-  body {
-	margin: 0 auto;
-  }
-  title-text {
-	font-size: 16px;
-	line-height: 1.5px;
-	font-family: 微软雅黑;
-  }
-  .float-left {
-	float: left;
-  }
-  .title {
-	padding-left: 9px;
-	padding-top: 2px;
-	color: #FFFFFF;
-  }
-  .logo {
-	margin-bottom: 5px;
-	margin-top: 5px;
-	margin-right: 0px;
-	margin-left: 0px;
-  }
-  * {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-  }
- </style>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
 </head>
 
 <body onload="go_index()";>
-<div class="header">
-  <div class="container">
-    <div class="logo float-left"><img src="img/logo-icon.png" width="32" height="30" alt=""/></div>
-    <div class="title float-left">
-      <p class="title-text">公益时统计平台</p>
-	  </div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+      
+      <a class="navbar-brand" href="#">
+      <div class="logo">
+      	<img src="img/logo-icon.png" class="img-responsive" alt="Placeholder image" width="30px">
+      </div>
+      中珠数院公益时平台
+      </a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="defaultNavbar1">
+      <ul class="nav navbar-nav navbar-right">
+       	<li><a href="#">申请公益时</a></li>
+		<li><a href="logout">登出</a></li>
+		</ul>
+    </div>
+    <!-- /.navbar-collapse -->
   </div>
-</div>
-<div class="main">
-  <div class="user_info">
-  	<label id="user_name">0</label>
-    <br>
-    <label id="user_id">16343075</label>
-    <br>
-    <label id="user_suahours">0</label>
-    <br>
-    <label>GSUA_title:</label>
-    <label id="user_GSUA_title"></label>
-    <br>
-    <label>group name:</label>
-    <label id="user_notice_detail"></label>
-    <br>
-    <label>GSUA time:</label>
-    <label id="user_GSUA_time"></label>
-    <br>
-    <label>actorGroupid:</label>
-    <label id="user_actorGroupid"></label>
-  </div>
-</div>
+  <!-- /.container-fluid -->
+</nav>
+<script src="js/bootstrap.js"></script>
 </body>
 </html>
