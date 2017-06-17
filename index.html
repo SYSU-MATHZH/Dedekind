@@ -3,14 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdn.bootcss.com/foundation/5.5.3/css/foundation.min.css">
 <!-- <link href="css/bootstrap.css" rel="stylesheet" type="text/css"> -->
 <link href="css/bootstrap-3.3.7.css" rel="stylesheet" type="text/css">
 <link href="css/index.css" rel="stylesheet" type="text/css">
 <!-- <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script> -->
 <script src="js/jquery-1.11.3.min.js"></script>
-<script src="https://cdn.bootcss.com/foundation/5.5.3/js/foundation.min.js"></script>
-<script src="https://cdn.bootcss.com/foundation/5.5.3/js/vendor/modernizr.js"></script>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>公益时平台</title>
 <script type="text/javascript" >
@@ -70,7 +67,7 @@
    if(xmlHttp.readyState == 4 && xmlHttp.status == 200)//判断返回码
     {var data=JSON.parse(xmlHttp.responseText);
      //alert(data.user_info.name) ;//显示数据库的成员姓名
-     user_GSUA_title.innerHTML=data.login_check;//if check == 0 输出
+     user_GSUA_title.innerHTML=data.notices[1].notice_title;//if check == 0 输出
      //a=document.createElement("label"); 创建动态label  b= document.createTextNode("aaa");  定义label的值b
      //a.appendChild(b);为a赋予b的值  document.body.appendChild(a); 创建一个新的label
      user_notice_detail.innerHTML=data.notices[1].notice_details;
@@ -105,12 +102,93 @@
       <ul class="nav navbar-nav navbar-right">
        	<li><a href="#">申请公益时</a></li>
 		<li><a href="logout">登出</a></li>
-		</ul>
+	  </ul>
     </div>
     <!-- /.navbar-collapse -->
   </div>
   <!-- /.container-fluid -->
 </nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+    <img src="http://place-hold.it/1280x150.png" class="img-responsive" alt="Placeholder image"> </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+   	  <div class="row">
+    	  <div class="col-lg-3"></div>
+    	  <div class="col-lg-9">
+    	  	<label id="user_name">吴旋辉</label>
+    	  	<label id="user_id">16343075</label>
+    	  	<div class="row">
+    	  		<div class="col-lg-12">
+    	  			<label>公益时数：</label>
+    	  			<label id="user_suahours">0</label>
+    	  			<label>h</label>
+    	  		</div>
+    	  	</div>
+    	  </div>
+  	  </div>
+    </div>
+    <div class="col-lg-6"></div>
+  </div>
+</div>
+<div class="container">
+  <div role="tabpanel">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#home1" data-toggle="tab" role="tab" aria-controls="tab1">公告</a></li>
+      <li role="presentation"><a href="#paneTwo1" data-toggle="tab" role="tab" aria-controls="tab2">公益时详情</a></li>
+      <li role="presentation" class="dropdown"><a href="#" id="tabDropOne1" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-controls="tab3" aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
+        <ul class="dropdown-menu" aria-labelledby="tabDropOne1">
+          <li><a href="#tabDropDownOne1" tabindex="-1" data-toggle="tab">申请记录</a></li>
+          <li><a href="#tabDropDownTwo1" tabindex="-1" data-toggle="tab">申诉记录</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div id="tabContent1" class="tab-content">
+      <div role="tabpanel" class="tab-pane fade in active" id="home1">
+        <div class="row">
+        	<div class="col-lg-12">
+       		  	<div class="panel panel-default">
+    			<div class="panel-body">
+       			  <div class="row">
+        	<div class="col-lg-12">
+       		  	<div class="panel panel-default">
+    			<div class="panel-body">
+        			<h2 id="user_GSUA_title">公告1</h2>
+        			<p id="user_notice_detail">详情</p>
+    			</div>
+			  	</div>
+        	</div>
+        </div>
+        <div class="row">
+        	<div class="col-lg-12">
+       		  	<div class="panel panel-default">
+    			<div class="panel-body">
+        			<h2>公告2</h2>
+        			<p>详情</p>
+    			</div>
+			  	</div>
+        	</div>
+        </div>
+    			</div>
+			  	</div>
+        	</div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="paneTwo1">
+        <p>Content 2</p>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="tabDropDownOne1">
+        <p>Dropdown content#1</p>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="tabDropDownTwo1">
+        <p>Dropdown content#2 </p>
+      </div>
+    </div>
+  </div>
+</div>
 <script src="js/bootstrap.js"></script>
 </body>
 </html>
