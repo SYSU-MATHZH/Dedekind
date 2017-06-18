@@ -46,16 +46,7 @@ def index():
         bottle.redirect('/login')
 
 
-# 登录
-@bottle.route('/login')
-def login():
-    s = bottle.request.environ.get('beaker.session')
-    if login_check(s):
-        bottle.redirect('/')
-    else:
-        return bottle.template('login.html')
-
-
+# 静态数据
 @bottle.route('/img/<filename:re:.*\.png>')
 def img_static(filename):
     return bottle.static_file(filename, root='./img')
@@ -71,6 +62,16 @@ def img_static(filename):
 @bottle.route('/css/<filename:re:.*\.css>')
 def img_static(filename):
     return bottle.static_file(filename, root='./css')
+
+
+# 登录
+@bottle.route('/login')
+def login():
+    s = bottle.request.environ.get('beaker.session')
+    if login_check(s):
+        bottle.redirect('/')
+    else:
+        return bottle.template('login.html')
 
 
 @bottle.route('/login', method='POST')
@@ -204,6 +205,17 @@ def notice():
         json['login_check'] = 1
         json['notices'] = None
     return json
+
+
+@bottle.route('/apply_sua')
+def apply_sua():
+    s = bottle.request.environ.get('beaker.session')
+    if login_check(s):
+        return bottle.template('apply_sua.html')
+    else:
+        bottle.redirect('/')
+
+
 
 @bottle.route('/test')
 def test():
