@@ -28,9 +28,16 @@ class Sua(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    team = models.CharField(max_length=200)
+    team = models.CharField(max_length=200, default="未分组")
     date = models.DateTimeField('活动日期')
     suahours = models.FloatField()
+    last_time_suahours = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.title
+
+    def update_student_suahours(self):
+        if self.last_time_suahours != self.suahours:
+            self.student.suahours += (self.suahours - self.last_time_suahours)
+            self.student.save()
+            self.last_time_suahours = self.suahours

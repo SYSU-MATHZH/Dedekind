@@ -7,7 +7,9 @@ from .forms import LoginForm
 
 @login_required
 def index(request):
-    return render(request, 'sua/index.html')
+    usr = request.user
+    stu = usr.student
+    return render(request, 'sua/index.html', {'stu_name': stu.name, 'stu_number': stu.number, 'stu_suahours': stu.suahours})
 
 
 def login_view(request):
