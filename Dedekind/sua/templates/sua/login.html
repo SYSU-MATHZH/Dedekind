@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'sua/css/login.css' %}">
+</head>
+
+<body>
+    <div class="box_one_noborder">
+        <div class="logo_img">
+            <img class="logo" src="{% static "sua/images/logo.png" %}">
+        </div>
+    </div>
+    <div class="box_one">
+        <div class="logo_title">
+            <h1>公益时平台登录系统</h1>
+        </div>
+        <form action="/login" method="POST">
+            {% csrf_token %}
+            <label for="id_{{ form.user_name.name }}">{{ form.user_name.label }}</label>
+            {{ form.user_name }}
+            <label for="id_{{ form.user_password.name }}">{{ form.user_password.label }}</label>
+            {{ form.user_password }}
+            {{ form.loginstatus }}
+            <label for="id_{{ form.loginstatus.name }}">
+              15天内免登录
+              <a class="link" href="forget_password">忘记密码？</a>
+            </label>
+            <div class="div_login">
+                <input class="button_login" type="submit" name="save" value="登录">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
