@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from .forms import LoginForm
 
 
@@ -62,4 +63,31 @@ def logout_view(request):
 
 @login_required
 def apply_sua(request):
-    return render(request, 'sua/apply_sua.html')
+    usr = request.user
+    if hasattr(usr, 'student'):
+        stu = usr.student
+        name = stu.name
+        number = stu.number
+    else:
+        if usr.is_staff:
+            name = 'Admin.' + usr.username
+        else:
+            name = 'NoStuInfo.' + usr.username
+        number = '------'
+    date = timezone.now()
+    year = date.year
+    month = date.month
+    if month < 9:
+        year_before = year - 1
+        year_after = year
+    else:
+        year_before = year
+        year_after = year + 1
+
+    return render(request, 'sua/apply_sua.html', {
+        'stu_name': name,
+        'stu_number': number,
+        'apply_date': date.date(),
+        'apply_year_before': year_before,
+        'apply_year_after': year_after,
+    })

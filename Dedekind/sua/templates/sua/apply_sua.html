@@ -63,7 +63,7 @@
   	  					<label for="actor-name">
   	  					姓名
   	  					</label>
-						<p id="actor-name" class="form-control-static">李超朗</p>
+						<p id="actor-name" class="form-control-static">{{ stu_name }}</p>
   	  				</div>
   	  				</div>
   	  				<div class="col-xs-6">
@@ -71,7 +71,7 @@
   	  					<label for="actor-code">
   	  					学号
   	  					</label>
-  	  					<p id="actor-code" class="form-control-static">16343035</p>
+  	  					<p id="actor-code" class="form-control-static">{{ stu_number }}</p>
   	  				</div>
   	  				</div>
 						</div>
@@ -85,7 +85,7 @@
   	  					<label for="actor-date">
   	  					申请日期
   	  					</label>
-  	  					<p id="actor-date" class="form-control-static">2017-05-08</p>
+  	  					<p id="actor-date" class="form-control-static">{{ apply_date }}</p>
   	  				</div>
   	  				</div>
   	  				<div class="col-xs-6">
@@ -93,7 +93,7 @@
   	  					<label for="actor-date">
   	  					学年度
   	  					</label>
-  	  					<p id="actor-date" class="form-control-static">2016~2017</p>
+  	  					<p id="actor-date" class="form-control-static">{{ apply_year_before }}~{{ apply_year_after }}</p>
   	  				</div>
   	  				</div>
 						</div>
