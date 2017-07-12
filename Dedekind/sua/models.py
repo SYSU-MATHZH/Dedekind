@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext as _
+from sua.storage import FileStorage
 import datetime
 
 
@@ -18,7 +19,11 @@ class Student(models.Model):
     number = models.IntegerField(_("Student Number"))
     suahours = models.FloatField()
     name = models.CharField(max_length=100)
-    grade = models.IntegerField(_("Student Grade"), choices=YEAR_CHOICES, default=datetime.datetime.now().year)
+    grade = models.IntegerField(
+        _("Student Grade"),
+        choices=YEAR_CHOICES,
+        default=datetime.datetime.now().year
+    )
 
     def __str__(self):
         return self.name
@@ -48,3 +53,37 @@ class Sua(models.Model):
             self.student.suahours += self.suahours
             self.student.save()
             self.last_time_suahours = self.suahours
+
+
+class Proof(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    date = models.DateTimeField('生成日期')
+    is_offline = models.BooleanField(default=False)
+    proof_file = models.FileField(
+        upload_to='proofs',
+        storage=FileStorage(),
+        blank=True,
+    )
+
+    def __str__(self):
+        if self.is_offline:
+            return '线下证明'
+        else:
+            return self.user.username + '_' + self.date.strftime("%Y%m%d%H%M%S")
+
+
+class Sua_Application(models.Model):
+    sua = models.OneToOneField(
+        Sua,
+        on_delete=models.CASCADE,
+    )
+    date = models.DateTimeField('申请日期')
+    detail = models.CharField(max_length=400)
+    contact = models.CharField(max_length=100)
+    proof = models.ForeignKey(Proof, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.sua.student.name + '的 ' + self.sua.title + '的 ' + '申请'

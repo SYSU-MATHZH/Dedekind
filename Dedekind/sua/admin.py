@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import Sua, Student
+from .models import Sua, Student, Proof, Sua_Application
 
 
 admin.site.register(Sua)
 admin.site.register(Student)
+admin.site.register(Proof)
+admin.site.register(Sua_Application)
