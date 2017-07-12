@@ -32,12 +32,19 @@ class Sua(models.Model):
     date = models.DateTimeField('活动日期')
     suahours = models.FloatField()
     last_time_suahours = models.FloatField(default=0.0)
+    is_valid = models.BooleanField(default=False)
 
     def __str__(self):
         return self.student.name + '的 ' + self.title
 
+    def clean_suahours(self):
+        self.student.suahours -= self.last_time_suahours
+        self.student.save()
+        self.last_time_suahours = 0.0
+
     def update_student_suahours(self):
         if self.last_time_suahours != self.suahours:
-            self.student.suahours += (self.suahours - self.last_time_suahours)
+            self.clean_suahours()
+            self.student.suahours += self.suahours
             self.student.save()
             self.last_time_suahours = self.suahours

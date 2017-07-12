@@ -16,7 +16,7 @@ def index(request):
         number = stu.number
         suahours = stu.suahours
         i = 0
-        for sua in stu.sua_set.order_by('-date'):
+        for sua in stu.sua_set.filter(is_valid=True).order_by('-date'):
             i += 1
             sua_list.append((i, sua))
     else:
