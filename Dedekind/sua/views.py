@@ -8,23 +8,29 @@ from .forms import LoginForm
 @login_required
 def index(request):
     usr = request.user
+    sua_list = []
     if hasattr(usr, 'student'):
         stu = usr.student
-        return render(request, 'sua/index.html', {
-            'stu_name': stu.name,
-            'stu_number': stu.number,
-            'stu_suahours': stu.suahours
-        })
+        name = stu.name
+        number = stu.number
+        suahours = stu.suahours
+        i = 0
+        for sua in stu.sua_set.order_by('-date'):
+            i += 1
+            sua_list.append((i, sua))
     else:
         if usr.is_staff:
             name = 'Admin.' + usr.username
         else:
             name = 'NoStuInfo.' + usr.username
-        return render(request, 'sua/index.html', {
-            'stu_name': name,
-            'stu_number': '------',
-            'stu_suahours': '-.-'
-        })
+        number = '------'
+        suahours = '-.-'
+    return render(request, 'sua/index.html', {
+        'stu_name': name,
+        'stu_number': number,
+        'stu_suahours': suahours,
+        'sua_list': sua_list,
+    })
 
 
 def login_view(request):

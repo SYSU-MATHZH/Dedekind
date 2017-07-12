@@ -34,7 +34,7 @@ class Sua(models.Model):
     last_time_suahours = models.FloatField(default=0.0)
 
     def __str__(self):
-        return self.title
+        return self.student.name + '的 ' + self.title
 
     def update_student_suahours(self):
         if self.last_time_suahours != self.suahours:

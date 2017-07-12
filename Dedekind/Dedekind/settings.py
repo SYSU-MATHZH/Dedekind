@@ -25,7 +25,13 @@ SECRET_KEY = 'k0%%x5el=bh@l-$q(_pc-s$yf7f*=@z3r%zf)c#5y3z9t+r%pf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.104', 'localhost']
+ALLOWED_HOSTS = [
+    '192.168.1.104',
+    'localhost',
+    '192.168.1.101',
+    'linouzan.oicp.io',
+    'projectdedekind.imwork.net',
+]
 
 
 # Application definition
@@ -104,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
 
