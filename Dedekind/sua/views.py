@@ -10,6 +10,7 @@ from .forms import LoginForm
 def index(request):
     usr = request.user
     sua_list = []
+    sa_list = []
     if hasattr(usr, 'student'):
         stu = usr.student
         name = stu.name
@@ -19,6 +20,11 @@ def index(request):
         for sua in stu.sua_set.filter(is_valid=True).order_by('-date'):
             i += 1
             sua_list.append((i, sua))
+        i = 0
+        for sua in stu.sua_set.order_by('-sua_application__date'):
+            if hasattr(sua, 'sua_application'):
+                i += 1
+                sa_list.append((i, sua.sua_application))
     else:
         if usr.is_staff:
             name = 'Admin.' + usr.username
@@ -31,6 +37,7 @@ def index(request):
         'stu_number': number,
         'stu_suahours': suahours,
         'sua_list': sua_list,
+        'sa_list': sa_list,
     })
 
 
