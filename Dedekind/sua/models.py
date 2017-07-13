@@ -29,11 +29,24 @@ class Student(models.Model):
         return self.name
 
 
+class SuaGroup(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    is_staff = models.BooleanField(default=False)
+
+    def __str__(self):
+        if self.is_staff:
+            result = '院内：' + self.name
+        else:
+            result = '院外：' + self.name
+        return result
+
+
 class Sua(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(SuaGroup, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    team = models.CharField(max_length=200, default="未分组")
+    team = models.CharField(max_length=200, default="无分组")
     date = models.DateTimeField('活动日期')
     suahours = models.FloatField()
     last_time_suahours = models.FloatField(default=0.0)

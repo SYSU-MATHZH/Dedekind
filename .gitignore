@@ -108,3 +108,4 @@ test.tpl
 test.py
 tab/
 Dedekind/db.sqlite3
+Dedekind/media/
