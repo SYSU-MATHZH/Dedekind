@@ -5,7 +5,11 @@ from django.http import HttpResponse
 class FileStorage(FileSystemStorage):
     from django.conf import settings
 
-    def __init__(self, location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL):
+    def __init__(
+        self,
+        location=settings.MEDIA_ROOT,
+        base_url=settings.MEDIA_URL
+    ):
         # 初始化
         super(FileStorage, self).__init__(location, base_url)
 

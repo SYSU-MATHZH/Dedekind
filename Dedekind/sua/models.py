@@ -6,7 +6,7 @@ import datetime
 
 
 YEAR_CHOICES = []
-for r in range(1980, (datetime.datetime.now().year+4)):
+for r in range(1980, (datetime.datetime.now().year + 4)):
     YEAR_CHOICES.append((r, r))
 
 
@@ -85,7 +85,9 @@ class Proof(models.Model):
         if self.is_offline:
             return '线下证明'
         else:
-            return self.user.username + '_' + self.date.strftime("%Y%m%d%H%M%S")
+            return self.user.username +\
+                '_' +\
+                self.date.strftime("%Y%m%d%H%M%S")
 
 
 class Sua_Application(models.Model):
