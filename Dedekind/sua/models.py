@@ -100,6 +100,7 @@ class Sua_Application(models.Model):
     contact = models.CharField(max_length=100)
     proof = models.ForeignKey(Proof, on_delete=models.CASCADE)
     is_checked = models.BooleanField(default=False)
+    feedback = models.CharField(max_length=400, blank=True)
 
     def __str__(self):
         return self.sua.student.name + '的 ' + self.sua.title + '的 ' + '申请'

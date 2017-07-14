@@ -37,7 +37,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="defaultNavbar1">
       <ul class="nav navbar-nav navbar-right">
-       	<li><a href="apply_sua">申请公益时</a></li>
+       	<li><a href="{% url 'sua:apply_sua' %}">申请公益时</a></li>
 		<li><a href="logout">登出</a></li>
 	  </ul>
     </div>
@@ -145,42 +145,44 @@
         </div>
       </div>
       <div role="tabpanel" class="tab-pane fade" id="tabDropDownOne1">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>申请日期</th>
-              <th>活动名称</th>
-              <th>举办单位</th>
-              <th>公益时</th>
-              <th>是否通过</th>
-            </tr>
-          </thead>
-          {% if sa_list %}
-            <tbody>
-              {% for sa in sa_list %}
-                <tr>
-                  <td>{{ sa.0 }}</td>
-                  <td>{{ sa.1.date }}</td>
-                  <td>{{ sa.1.sua.title }}</td>
-                  <td>{{ sa.1.sua.group }}</td>
-                  <td>{{ sa.1.sua.suahours }}</td>
-                  <td>
-                    {% if sa.1.is_checked %}
-                      {% if sa.1.sua.is_valid %}
-                        是
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>申请日期</th>
+                <th>活动名称</th>
+                <th>举办单位</th>
+                <th>公益时</th>
+                <th>是否通过</th>
+              </tr>
+            </thead>
+            {% if sa_list %}
+              <tbody>
+                {% for sa in sa_list %}
+                  <tr>
+                    <td>{{ sa.0 }}</td>
+                    <td>{{ sa.1.date }}</td>
+                    <td><a href="{% url 'sua:application_detail' sa.1.id %}">{{ sa.1.sua.title }}</a></td>
+                    <td>{{ sa.1.sua.group }}</td>
+                    <td>{{ sa.1.sua.suahours }}</td>
+                    <td>
+                      {% if sa.1.is_checked %}
+                        {% if sa.1.sua.is_valid %}
+                          是
+                        {% else %}
+                          否
+                        {% endif %}
                       {% else %}
-                        否
+                        待审核
                       {% endif %}
-                    {% else %}
-                      待审核
-                    {% endif %}
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          {% endif %}
-        </table>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            {% endif %}
+          </table>
+        </div>
       </div>
       <div role="tabpanel" class="tab-pane fade" id="tabDropDownTwo1">
         <p>Dropdown content#2 </p>

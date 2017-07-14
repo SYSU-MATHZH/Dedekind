@@ -1,3 +1,4 @@
+from django.views import generic
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -5,7 +6,34 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .forms import LoginForm, SuaForm, Sua_ApplicationForm, ProofForm
-from .models import Proof
+from .models import Proof, Sua_Application
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['user_name']
+            password = form.cleaned_data['user_password']
+            loginstatus = form.cleaned_data['loginstatus']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                if(loginstatus):
+                    request.session.set_expiry(15 * 24 * 3600)
+                else:
+                    request.session.set_expiry(0)
+                return HttpResponseRedirect('/')
+            else:
+                return HttpResponseRedirect('/login')
+    else:
+        form = LoginForm()
+    return render(request, 'sua/login.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/login')
 
 
 @login_required
@@ -41,33 +69,6 @@ def index(request):
         'sua_list': sua_list,
         'sa_list': sa_list,
     })
-
-
-def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['user_name']
-            password = form.cleaned_data['user_password']
-            loginstatus = form.cleaned_data['loginstatus']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                if(loginstatus):
-                    request.session.set_expiry(15 * 24 * 3600)
-                else:
-                    request.session.set_expiry(0)
-                return HttpResponseRedirect('/')
-            else:
-                return HttpResponseRedirect('/login')
-    else:
-        form = LoginForm()
-    return render(request, 'sua/login.html', {'form': form})
-
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect('/login')
 
 
 @login_required
@@ -157,3 +158,31 @@ def apply_sua(request):
         'suaForm': suaForm,
         'sua_ApplicationForm': sua_ApplicationForm,
     })
+
+
+class ApplicationDetailView(generic.DetailView):
+    model = Sua_Application
+    template_name = 'sua/application_detail.html'
+    context_object_name = 'sa'
+
+    def get_queryset(self):
+        user = self.request.user
+        return Sua_Application.objects.filter(
+            sua__student__user=user
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super(ApplicationDetailView, self).get_context_data(**kwargs)
+        sa = self.get_object()
+        year = sa.date.year
+        month = sa.date.month
+        if month < 9:
+            year_before = year - 1
+            year_after = year
+        else:
+            year_before = year
+            year_after = year + 1
+        print(context)
+        context['year_before'] = year_before
+        context['year_after'] = year_after
+        return context
