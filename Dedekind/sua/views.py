@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .forms import LoginForm, SuaForm, Sua_ApplicationForm, ProofForm
-from .models import Proof, Sua_Application
+from .models import Proof, Sua_Application, GSuaPublicity
 
 
 def login_view(request):
@@ -41,6 +41,7 @@ def index(request):
     usr = request.user
     sua_list = []
     sa_list = []
+    gsap_list = []
     if hasattr(usr, 'student'):
         stu = usr.student
         name = stu.name
@@ -62,12 +63,27 @@ def index(request):
             name = 'NoStuInfo.' + usr.username
         number = '------'
         suahours = '-.-'
+    # 组织公益时活动的公示
+    gsaps = GSuaPublicity.objects.filter(
+        is_published=True,
+        published_begin_date__lte=timezone.now(),
+        published_end_date__gt=timezone.now()
+    )
+    for gsap in gsaps:
+        suas = []
+        suass = gsap.gsua.suas.order_by('student__number')
+        i = 0
+        for sua in suass:
+            i += 1
+            suas.append((i, sua))
+        gsap_list.append((gsap, suas))
     return render(request, 'sua/index.html', {
         'stu_name': name,
         'stu_number': number,
         'stu_suahours': suahours,
         'sua_list': sua_list,
         'sa_list': sa_list,
+        'gsap_list': gsap_list,
     })
 
 

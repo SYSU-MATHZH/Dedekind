@@ -33,6 +33,7 @@ class SuaGroup(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     is_staff = models.BooleanField(default=False)
+    contact = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         if self.is_staff:
@@ -97,10 +98,35 @@ class Sua_Application(models.Model):
     )
     date = models.DateTimeField('申请日期')
     detail = models.CharField(max_length=400)
-    contact = models.CharField(max_length=100)
+    contact = models.CharField(max_length=100, blank=True)
     proof = models.ForeignKey(Proof, on_delete=models.CASCADE)
     is_checked = models.BooleanField(default=False)
     feedback = models.CharField(max_length=400, blank=True)
 
     def __str__(self):
         return self.sua.student.name + '的 ' + self.sua.title + '的 ' + '申请'
+
+
+class GSua(models.Model):
+    title = models.CharField(max_length=200)
+    group = models.ForeignKey(SuaGroup, on_delete=models.CASCADE)
+    suas = models.ManyToManyField(Sua)
+    date = models.DateTimeField('活动日期')
+    is_valid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.group.name + '的 ' + self.title + '的活动'
+
+
+class GSuaPublicity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gsua = models.ForeignKey(GSua, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    detail = models.CharField(max_length=400)
+    contact = models.CharField(max_length=100, blank=True)
+    is_published = models.BooleanField(default=False)
+    published_begin_date = models.DateTimeField('开始公示时间')
+    published_end_date = models.DateTimeField('结束公示时间')
+
+    def __str__(self):
+        return str(self.gsua) + '的公示'
