@@ -130,3 +130,23 @@ class GSuaPublicity(models.Model):
 
     def __str__(self):
         return str(self.gsua) + '的公示'
+
+
+class Appeal(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    date = models.DateTimeField('申诉日期')
+    sua = models.ForeignKey(Sua, on_delete=models.CASCADE, null=True, blank=True)
+    gsua = models.ForeignKey(GSua, on_delete=models.CASCADE, null=True, blank=True)
+    claim = models.CharField(max_length=400)
+    reason = models.CharField(max_length=400)
+    is_passed = models.BooleanField(default=False)
+    is_checked = models.BooleanField(default=False)
+    feedback = models.CharField(max_length=400, blank=True)
+
+    def __str__(self):
+        if self.sua is not None:
+            return self.student.name + '的“' + self.sua.title + '”的申诉'
+        elif self.gsua is not None:
+            return self.student.name + '的“' + self.gsua.title + '”的申诉'
+        else:
+            return self.student.name + '的申诉'
