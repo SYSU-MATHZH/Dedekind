@@ -70,13 +70,18 @@ def index(request):
         published_end_date__gt=timezone.now()
     )
     for gsap in gsaps:
-        suas = []
-        suass = gsap.gsua.suas.order_by('student__number')
+        teams = dict()
+        suass = gsap.gsua.suas.order_by('team', 'suahours', 'student__name')
         i = 0
         for sua in suass:
             i += 1
-            suas.append((i, sua))
-        gsap_list.append((gsap, suas))
+            if sua.team not in teams:
+                teams[sua.team] = dict()
+            if sua.suahours not in teams[sua.team]:
+                teams[sua.team][sua.suahours] = []
+            teams[sua.team][sua.suahours].append(sua.student.name)
+        print(teams)
+        gsap_list.append((gsap, teams))
     return render(request, 'sua/index.html', {
         'stu_name': name,
         'stu_number': number,

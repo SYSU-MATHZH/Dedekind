@@ -1,0 +1,206 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link href="css/bootstrap.css" rel="stylesheet" type="text/css"> -->
+<link rel="stylesheet" type="text/css" href="/static/sua/css/bootstrap-3.3.7.css">
+<link rel="stylesheet" type="text/css" href="/static/sua/css/index.css">
+<!-- <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script> -->
+<script src="/static/sua/js/jquery-1.11.3.min.js"></script>
+<script src="/static/sua/js/bootstrap.js"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>公益时平台</title>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#defaultNavbar1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+
+      <a class="navbar-brand" href="#">
+      <div class="logo">
+      	<img src="{% static "sua/images/logo-icon.png" %}" class="img-responsive" alt="Placeholder image" width="30px">
+      </div>
+      中珠数院公益时平台
+      </a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="defaultNavbar1">
+      <ul class="nav navbar-nav navbar-right">
+       	<li><a href="{% url 'sua:apply_sua' %}">申请公益时</a></li>
+		<li><a href="logout">登出</a></li>
+	  </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+  </div>
+  <!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+    <img src="http://place-hold.it/1280x150.png" class="img-responsive" alt="Placeholder image"> </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+   	  <div class="row">
+    	  <div class="col-lg-3"></div>
+    	  <div class="col-lg-9">
+    	  	<label id="user_name">{{ stu_name }}</label>
+    	  	<label id="user_id">{{ stu_number }}</label>
+    	  	<div class="row">
+    	  		<div class="col-lg-12">
+    	  			<label>公益时数：</label>
+    	  			<label id="user_suahours">{{ stu_suahours }}</label>
+    	  			<label>h</label>
+    	  		</div>
+    	  	</div>
+    	  </div>
+  	  </div>
+    </div>
+    <div class="col-lg-6"></div>
+  </div>
+</div>
+<div class="container">
+  <div role="tabpanel">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#home1" data-toggle="tab" role="tab" aria-controls="tab1">公告</a></li>
+      <li role="presentation"><a href="#paneTwo1" data-toggle="tab" role="tab" aria-controls="tab2">公益时详情</a></li>
+      <li role="presentation" class="dropdown"><a href="#" id="tabDropOne1" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-controls="tab3" aria-haspopup="true" aria-expanded="false">更多<span class="caret"></span></a>
+        <ul class="dropdown-menu" aria-labelledby="tabDropOne1">
+          <li><a href="#tabDropDownOne1" tabindex="-1" data-toggle="tab">申请记录</a></li>
+          <li><a href="#tabDropDownTwo1" tabindex="-1" data-toggle="tab">申诉记录</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div id="tabContent1" class="tab-content">
+      <div role="tabpanel" class="tab-pane fade in active" id="home1">
+        <div class="row">
+        	<div class="col-lg-12">
+            {% for gsapc in gsap_list %}
+       		    <div class="panel panel-default">
+                <div class="panel-body">
+            			  <h3 id="user_GSUA_title">{{gsapc.0.title}}</h3>
+            			  <p id="user_notice_detail">{{gsapc.0.detail}}</p>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>序号</th>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>组别</th>
+                            <th>公益时</th>
+                          </tr>
+                        </thead>
+                        {% if gsapc.1 %}
+                          <tbody>
+                            {% for sua in gsapc.1 %}
+                              <tr>
+                                <td>{{ sua.0 }}</td>
+                                <td>{{ sua.1.student.number }}</td>
+                                <td>{{ sua.1.student.name }}</td>
+                                <td>{{ sua.1.team }}</td>
+                                <td>{{ sua.1.suahours }} h</td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        {% endif %}
+                      </table>
+                    </div>
+        			  </div>
+			  	    </div>
+            {% endfor %}
+        	</div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="paneTwo1">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>活动日期</th>
+                <th>活动名称</th>
+                <th>举办单位</th>
+                <th>组别</th>
+                <th>公益时</th>
+              </tr>
+            </thead>
+            {% if sua_list %}
+              <tbody>
+                {% for sua in sua_list %}
+                  <tr>
+                    <td>{{ sua.0 }}</td>
+                    <td>{{ sua.1.date.date }}</td>
+                    <td>{{ sua.1.title }}</td>
+                    <td>{{ sua.1.group }}</td>
+                    <td>{{ sua.1.team }}</td>
+                    <td>{{ sua.1.suahours }} h</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            {% endif %}
+          </table>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="tabDropDownOne1">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>申请日期</th>
+                <th>活动名称</th>
+                <th>举办单位</th>
+                <th>公益时</th>
+                <th>是否通过</th>
+              </tr>
+            </thead>
+            {% if sa_list %}
+              <tbody>
+                {% for sa in sa_list %}
+                  <tr>
+                    <td>{{ sa.0 }}</td>
+                    <td>{{ sa.1.date }}</td>
+                    <td><a href="{% url 'sua:application_detail' sa.1.id %}">{{ sa.1.sua.title }}</a></td>
+                    <td>{{ sa.1.sua.group }}</td>
+                    <td>{{ sa.1.sua.suahours }}</td>
+                    <td>
+                      {% if sa.1.is_checked %}
+                        {% if sa.1.sua.is_valid %}
+                          是
+                        {% else %}
+                          否
+                        {% endif %}
+                      {% else %}
+                        待审核
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            {% endif %}
+          </table>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="tabDropDownTwo1">
+        <p>Dropdown content#2 </p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
